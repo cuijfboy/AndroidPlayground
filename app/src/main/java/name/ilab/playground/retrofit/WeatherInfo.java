@@ -5,7 +5,7 @@ package name.ilab.playground.retrofit;
  */
 public class WeatherInfo {
 
-    private Info weatherinfo;
+    public Info weatherinfo;
 
     @Override
     public String toString() {
@@ -14,7 +14,7 @@ public class WeatherInfo {
                 '}';
     }
 
-    class Info {
+    public static class Info {
         public String city;
         public String cityid;
         public String temp;

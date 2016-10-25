@@ -4,15 +4,15 @@ import android.app.Application;
 
 import com.squareup.leakcanary.LeakCanary;
 
-import name.ilab.playground.annotation.Playground;
-
 import static name.ilab.playground.util.Log.logger;
+
+//import name.ilab.playground.annotation.Playground;
 
 /**
  * Created by cuijfboy on 16/8/22.
  */
 
-@Playground()
+//@Playground()
 public class ThisApp extends Application {
 
     @Override
@@ -21,5 +21,10 @@ public class ThisApp extends Application {
 
         logger().info("ThisApp.onCreate()");
         LeakCanary.install(this);
+    }
+
+    @Override
+    public Object getSystemService(String name) {
+        return super.getSystemService(name);
     }
 }

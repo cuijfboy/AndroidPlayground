@@ -12,13 +12,21 @@ import android.widget.Button;
 
 import com.jakewharton.rxbinding.view.RxView;
 
+import java.io.ByteArrayOutputStream;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import name.ilab.playground.R;
+import name.ilab.playground.retrofit.MockBufferSink;
 import name.ilab.playground.retrofit.WeatherInfo;
 import name.ilab.playground.retrofit.WeatherRxService;
 import name.ilab.playground.retrofit.WeatherService;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okio.BufferedSink;
+import okio.Okio;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -115,16 +123,43 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRetrofit() {
         retrofit = new Retrofit.Builder()
+                .client(new OkHttpClient.Builder()
+                        .addInterceptor(chain -> {
+                            Request request = chain.request();
+
+                            System.out.println("request = " + request);
+                            System.out.println("request.body() = " + request.body().toString());
+                            System.out.println("request.headers() = " + request.headers());
+                            System.out.println("request.header(\"sign\") = " + request.header("sign"));
+                            System.out.println("request.header(\"AAA\") = " + request.header("AAA"));
+
+                            RequestBody body = request.body();
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            BufferedSink bufferedSink = Okio.buffer(Okio.sink(baos));
+                            body.writeTo(bufferedSink);
+//                            body.writeTo(new MockBufferSink());
+                            bufferedSink.flush();
+                            System.out.println("baos = " + baos.toString());
+
+                            return chain.proceed(request);
+                        }).build())
                 .baseUrl("http://www.weather.com.cn")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
+
     }
 
     @OnClick(R.id.button_getWeatherInfo)
     void getWeatherInfo() {
         WeatherService weatherService = retrofit.create(WeatherService.class);
-        Call<WeatherInfo> weatherInfoCall = weatherService.getWeatherInfo("101120201");
+        WeatherInfo weatherInfo = new WeatherInfo();
+        WeatherInfo.Info info = new WeatherInfo.Info();
+        weatherInfo.weatherinfo = info;
+        info.city = "cityVal";
+        info.cityid = "cityIdVal";
+
+        Call<WeatherInfo> weatherInfoCall = weatherService.getWeatherInfo2(weatherInfo);
         weatherInfoCall.enqueue(new Callback<WeatherInfo>() {
             @Override
             public void onResponse(Call<WeatherInfo> call, Response<WeatherInfo> response) {
