@@ -5,10 +5,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
-        classpath "io.realm:realm-gradle-plugin:1.1.0"
+        classpath 'org.aspectj:aspectjtools:1.8.9'
     }
 }
 
@@ -20,4 +19,54 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+ext {
+
+    ver = [
+            compileSdkVersion: 25,
+            buildToolsVersion: '25.0.1',
+            minSdkVersion    : 15,
+            targetSdkVersion : 25
+    ]
+
+    dep = [
+            junit                   : 'junit:junit:4.12',
+
+            supportV4               : 'com.android.support:support-v4:25.0.1',
+            supportRecyclerViewV7   : 'com.android.support:recyclerview-v7:25.0.1',
+            supportAppCompatV7      : 'com.android.support:appcompat-v7:25.0.1',
+            supportDesign           : 'com.android.support:design:25.0.1',
+
+            aspectJ                 : 'org.aspectj:aspectjrt:1.8.9',
+
+            rxJava                  : 'io.reactivex:rxjava:1.1.8',
+            rxAndroid               : 'io.reactivex:rxandroid:1.2.1',
+
+            retrofit                : 'com.squareup.retrofit2:retrofit:2.1.0',
+            retrofitGsonConverter   : 'com.squareup.retrofit2:converter-gson:2.1.0',
+            retrofitRxJavaAdapter   : 'com.squareup.retrofit2:adapter-rxjava:2.1.0',
+            okHttpLoggingInterceptor: 'com.squareup.okhttp3:logging-interceptor:3.4.1',
+
+            slf4jApi                : 'org.slf4j:slf4j-api:1.7.21',
+            slf4jJdk                : 'org.slf4j:slf4j-jdk14:1.7.21',
+
+            dagger                  : 'com.google.dagger:dagger:2.6.1',
+            daggerCompiler          : 'com.google.dagger:dagger-compiler:2.6.1',
+
+            autoValueCompiler       : 'com.google.auto.value:auto-value:1.3',
+            autoValueAnnotations    : 'com.jakewharton.auto.value:auto-value-annotations:1.3',
+            autoValueGson           : 'com.ryanharter.auto.value:auto-value-gson:0.4.2',
+
+            butterKnife             : 'com.jakewharton:butterknife:8.0.1',
+            butterKnifeCompiler     : 'com.jakewharton:butterknife-compiler:8.0.1',
+
+            rxBinding               : 'com.jakewharton.rxbinding:rxbinding:0.4.0',
+            rxBindingAppCompatV7    : 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0',
+            rxBindingDesign         : 'com.jakewharton.rxbinding:rxbinding-design:0.4.0',
+
+            leakCanary              : 'com.squareup.leakcanary:leakcanary-android:1.4-beta2',
+            leadCanaryNoOp          : 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2',
+    ]
+
 }

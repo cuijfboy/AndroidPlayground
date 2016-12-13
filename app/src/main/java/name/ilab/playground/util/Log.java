@@ -3,6 +3,7 @@ package name.ilab.playground.util;
 import org.slf4j.Logger;
 
 import name.ilab.playground.BuildConfig;
+import name.ilab.util.log.LoggerBuilder;
 
 /**
  * Created by cuijfboy on 16/7/27.

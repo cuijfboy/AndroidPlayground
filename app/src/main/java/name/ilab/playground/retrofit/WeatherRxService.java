@@ -10,7 +10,7 @@ import rx.Observable;
  */
 public interface WeatherRxService {
 
-    @GET("data/sk/{cityId}.html")
+    @GET("getTarget/sk/{cityId}.html")
     Observable<WeatherInfo> getWeatherInfo(@Path("cityId") String cityId);
 
 }

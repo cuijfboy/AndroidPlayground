@@ -12,21 +12,29 @@ import android.widget.Button;
 
 import com.jakewharton.rxbinding.view.RxView;
 
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import name.ilab.playground.R;
-import name.ilab.playground.retrofit.MockBufferSink;
 import name.ilab.playground.retrofit.WeatherInfo;
 import name.ilab.playground.retrofit.WeatherRxService;
 import name.ilab.playground.retrofit.WeatherService;
+import name.ilab.playground.ui.example.DrawerActivity;
+import name.ilab.playground.ui.example.FullscreenActivity;
+import name.ilab.playground.ui.example.ItemListActivity;
+import name.ilab.playground.ui.example.LoginActivity;
+import name.ilab.playground.ui.example.ScrollingActivity;
+import name.ilab.playground.ui.example.SettingsActivity;
+import name.ilab.playground.ui.example.TabActivity;
+import name.ilab.util.aop.AspectInject;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okio.BufferedSink;
-import okio.Okio;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -119,9 +127,21 @@ public class MainActivity extends AppCompatActivity {
     void onClickFab(View view) {
         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+        String result = testAspectInject("testAspectInject args");
+        System.out.println("onClickFab result = " + result);
+//        new Temp().temp();
+    }
+
+    @AspectInject
+    private String testAspectInject(String string) {
+        System.out.println("************* MainActivity.testAspectInject *************");
+        return "testAspectInject";
     }
 
     private void initRetrofit() {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         retrofit = new Retrofit.Builder()
                 .client(new OkHttpClient.Builder()
                         .addInterceptor(chain -> {
@@ -129,25 +149,50 @@ public class MainActivity extends AppCompatActivity {
 
                             System.out.println("request = " + request);
                             System.out.println("request.body() = " + request.body().toString());
+//                            System.out.println("request.body() = " + request.body());
                             System.out.println("request.headers() = " + request.headers());
                             System.out.println("request.header(\"sign\") = " + request.header("sign"));
                             System.out.println("request.header(\"AAA\") = " + request.header("AAA"));
 
-                            RequestBody body = request.body();
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            BufferedSink bufferedSink = Okio.buffer(Okio.sink(baos));
-                            body.writeTo(bufferedSink);
+                            String bodyString = getRequestBodyAsString(request);
+
+//                            RequestBody body = request.body();
+//                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                            BufferedSink bufferedSink = Okio.buffer(Okio.sink(baos));
+//                            body.writeTo(bufferedSink);
 //                            body.writeTo(new MockBufferSink());
-                            bufferedSink.flush();
-                            System.out.println("baos = " + baos.toString());
+//                            bufferedSink.flush();
+//                            System.out.println("baos = " + baos.toString());
+
+                            System.out.println("bodyString = " + bodyString);
+
+                            request = request.newBuilder()
+                                    .post(RequestBody.create(
+                                            MediaType.parse("application/json; charset=UTF-8"), "hahahahahaha"))
+                                    .build();
+
+                            String newBodyString = getRequestBodyAsString(request);
+                            System.out.println("newBodyString = " + newBodyString);
 
                             return chain.proceed(request);
-                        }).build())
+                        })
+                        .addInterceptor(loggingInterceptor).build())
                 .baseUrl("http://www.weather.com.cn")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
+    }
+
+    private String getRequestBodyAsString(Request request) throws IOException {
+        RequestBody requestBody = request.body();
+        if (requestBody == null) {
+            return null;
+        }
+
+        Buffer buffer = new Buffer();
+        requestBody.writeTo(buffer);
+        return buffer.readUtf8();
     }
 
     @OnClick(R.id.button_getWeatherInfo)

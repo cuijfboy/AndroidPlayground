@@ -29,48 +29,48 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.EmptyActivity">
+        <activity android:name=".ui.example.EmptyActivity">
         </activity>
         <activity
-            android:name=".ui.ScrollingActivity"
+            android:name=".ui.example.ScrollingActivity"
             android:label="@string/title_activity_scrolling"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name=".ui.example.SettingsActivity"
             android:label="@string/title_activity_settings">
         </activity>
         <activity
-            android:name=".ui.DrawerActivity"
+            android:name=".ui.example.DrawerActivity"
             android:label="@string/title_activity_drawer"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".ui.example.LoginActivity"
             android:label="@string/title_activity_login">
         </activity>
         <activity
-            android:name=".ui.FullscreenActivity"
+            android:name=".ui.example.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
             android:theme="@style/FullscreenTheme">
         </activity>
         <activity
-            android:name=".ui.TabActivity"
+            android:name=".ui.example.TabActivity"
             android:label="@string/title_activity_tab"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.ItemListActivity"
+            android:name=".ui.example.ItemListActivity"
             android:label="@string/title_item_list"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.ItemDetailActivity"
+            android:name=".ui.example.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".ui.ItemListActivity"
+            android:parentActivityName=".ui.example.ItemListActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
+            <meta-target
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="name.ilab.test.app.ui.ItemListActivity"/>
         </activity>

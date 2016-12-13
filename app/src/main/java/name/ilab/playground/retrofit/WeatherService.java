@@ -12,10 +12,10 @@ import retrofit2.http.Path;
  */
 public interface WeatherService {
 
-    @GET("/data/sk/{cityId}.html")
+    @GET("/getTarget/sk/{cityId}.html")
     Call<WeatherInfo> getWeatherInfo(@Path("cityId") String cityId);
 
     @Headers("sign: true")
-    @POST("/data/sk/{cityId}.html")
+    @POST("/getTarget/sk/{cityId}.html")
     Call<WeatherInfo> getWeatherInfo2(@Body WeatherInfo info);
 }
